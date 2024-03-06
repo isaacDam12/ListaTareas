@@ -1,0 +1,80 @@
+﻿@model ML.Tarea
+@{
+    ViewData["Title"] = "Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="text-center">Bienvenido, asigna tus tareas</h2>
+
+@using (Html.BeginForm("Form", "Tarea", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(model => model.IdTarea)
+
+    <div class="row">
+
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Titulo)
+            @Html.TextBoxFor(model => model.Titulo, new { @class = "form-control border-info"})
+        </div>
+
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Descripcion)
+            @Html.TextBoxFor(model => model.Descripcion, new { @class = "form-control border-info"})
+        </div>
+
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.FechaVencimiento)
+            <div class="input-group mb-3">
+                @Html.TextBoxFor(model => model.FechaVencimiento, new { @class = "form-control", @id = "datepicker" })
+            </div>
+        </div>
+
+    </div>
+
+
+    if(Model.IdTarea != 0)
+    {
+        <div class="row">
+            <div class="col-md-3 mt-3">
+                <input type="submit" class="btn btn-success" value = "Actualizar"/>
+            </div>
+
+            <div class="col-md-3 mt-3">
+                <a href="@Url.Action("GetAll","Tarea")" class = "btn btn-warning">Volver</a>
+            </div>
+        </div>
+    }else
+    {
+        <div class="row">
+            <div class="col-md-3 mt-3">
+                <input type="submit" class="btn btn-success" value="Guardar" />
+            </div>
+
+            <div class="col-md-3 mt-3">
+                <a href="@Url.Action("GetAll","Tarea")" class="btn btn-warning">Volver</a>
+            </div>
+        </div>
+    }
+}
+
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+@section Scripts {
+
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+
+    <script type="text/javascript"> 
+
+        $(function () {
+            $("#datepicker").datepicker({
+                dateFormat: 'dd-mm-yy',
+                changeMonth: true,
+                changeYear: true,
+                showAnim: "clip"
+            });
+        });
+    </script>
+
+}

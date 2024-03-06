@@ -1,0 +1,88 @@
+﻿@model ML.Tarea
+@{
+    ViewData["Title"] = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="text-center">Lista de Tareas</h1>
+
+<div class="mb-3">
+    <a href="@Url.Action("Form","Tarea")" class="btn btn-info">Agregar</a>
+</div>
+
+
+@if(Model == null)
+{
+    <p>No hay datos que mostrar</p>
+}else
+{
+    <div class="table-responsive">
+        <table class="table table-bordered table-dark text-center">
+            <thead class="table table-info">
+                <tr>
+                    <th>Editar</th>
+                    <th>Titulo</th>
+                    <th>Descripción</th>
+                    <th>Fecha Vencimiento</th>
+                    <th>Estado</th>
+                    <th>Eliminar</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach(ML.Tarea tarea in Model.Tareas)
+                {
+                    <tr>
+                        <td><a href="@Url.Action("Form","Tarea", new {IdTarea = tarea.IdTarea})" class="btn btn-warning">Editar</a></td>
+                        <td>@tarea.Titulo</td>
+                        <td>@tarea.Descripcion</td>
+                        <td>@tarea.FechaVencimiento.ToShortDateString()</td>
+                        @if (tarea.Estado)
+                        {
+                            <td class="text-center">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" checked onchange="ChangeStatus(@tarea.IdTarea,this)">
+
+                                </div>
+                            </td>
+                        }
+                        else
+                        {
+                            <td class="text-center">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" onchange="ChangeStatus(@tarea.IdTarea,this)">
+
+                                </div>
+                            </td>
+                        }
+                        <td><a href="@Url.Action("Delete","Tarea", new {IdTarea = tarea.IdTarea})" class="btn btn-danger">Eliminar</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@section Scripts {
+    <!--TABLA JQUERY-->
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript">
+        
+        function ChangeStatus(idEstado, e) {
+            var status = e.checked;
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("ChangeStatus")',
+                data: { IdEstado: idEstado, estado: status },
+                dataType: 'JSON',
+                success: {
+
+                },
+                error: {
+                }
+            });
+        }
+
+    </script>
+}
+
